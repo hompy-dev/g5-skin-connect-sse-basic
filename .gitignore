@@ -1,0 +1,15 @@
+/.idea
+/.vscode
+/node_modules
+/vendor
+.env
+.env.backup
+sftp-config.json
+sftp-config.json.bak
+composer.phar
+.phpunit.result.cache
+docker-compose.override.yml
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
