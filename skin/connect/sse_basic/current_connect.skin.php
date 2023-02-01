@@ -16,4 +16,5 @@ add_javascript('<script defer src="'.$connect_skin_url.'/script.js"></script>', 
 <div id="current_connect">
   <ul<?php if (G5_IS_MOBILE) echo ' class="mobile"'?> data-sse-url="<?php echo $connect_skin_url?>/sse.php"></ul>
   <p class="empty_li hidden">현재 접속자가 없습니다.</p>
+  <span id="noProfileImg"><?php echo get_member_profile_img()?></span>
 </div>

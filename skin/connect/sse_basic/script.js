@@ -15,6 +15,7 @@ $(function() {
   const iconSpinner = titleEl.find('.iconSpinner'); // SSE 활성화 아이콘
   const btnSseToggle = titleEl.find('.btnSseToggle'); // 실시간 On/Off 버튼
   const wrapper = $('#current_connect > ul');
+  const guestImg = $('#noProfileImg').html();
 
   // SSE Handler
   const SSE = {
@@ -35,9 +36,11 @@ $(function() {
         }
         wrapper.empty();
         $.each(list, (i, row) => {
+          let n = (i+1) + '';
+          if (!row.img) row.img = guestImg;
           html += `
             <li>
-              <span class="crt_num">${row.num}</span>
+              <span class="crt_num">${n.padStart(3,'0')}</span>
               <span class="crt_profile">${row.img}</span>
               <div class="crt_info">
                 <span class="crt_name">${row.name}</span>

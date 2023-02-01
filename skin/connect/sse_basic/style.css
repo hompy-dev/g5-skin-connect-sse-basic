@@ -28,15 +28,22 @@
   line-height: 30px;
   cursor: pointer;
 }
+#container_title .btnSseToggle.fa-toggle-on:before {
+  color: #3a8afd;
+}
+#current_connect #noProfileImg {
+  display: none;
+}
+
 
 /* mobile */
 #current_connect ul.mobile {
-    /*margin:0 -10px 0;*/
+  /*margin:0 -10px 0;*/
 }
 #current_connect ul.mobile li {
-    padding:10px 20px;
+  padding:10px 20px;
 }
 #current_connect ul.mobile .crt_num {
-    float:right;
-    margin-right: 0;
+  float:right;
+  margin-right: 0;
 }

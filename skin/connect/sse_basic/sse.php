@@ -10,12 +10,16 @@
 
 $n = ( preg_match("/\/theme\//", __FILE__) ) ? 5 : 3;
 $n+= ( preg_match("/\/mobile\//", __FILE__) ) ? 1 : 0;
-$incPrefix = str_repeat('../', $n);
-include_once $incPrefix.'common.php';
+$incPre = str_repeat('../', $n);
+
+include_once $incPre.'common.php';
+
+if (!$_SERVER['HTTP_REFERER'] || $_SERVER['HTTP_REFERER'] != G5_BBS_URL.'/current_connect.php') {
+  header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found'); exit;
+}
 
 header('Cache-Control: no-cache');
 header('Content-Type: text/event-stream');
-
 session_write_close();
 ob_end_flush();
 
@@ -26,8 +30,6 @@ $sql = "
   ORDER BY a.lo_datetime DESC
 ";
 
-$lastCnt = 0;
-
 while (true) {
   $sel = sql_query($sql);
   $list = [];
@@ -35,27 +37,22 @@ while (true) {
 
   while ( $row = sql_fetch_array($sel) ) {
     $data = [];
-    $url = get_text($row['lo_url']);
-    $data['img'] = get_member_profile_img($row['mb_id']);
-    $data['loc'] = ($url && $is_admin == 'super') ? "<a href=\"{$url}\">{$row['lo_location']}</a>" : $row['lo_location'];
     if ($row['mb_id']) {
       $data['name'] = get_sideview($row['mb_id'], cut_str($row['mb_nick'], $config['cf_cut_name']), $row['mb_email'], $row['mb_homepage']);
+      $data['img'] = get_member_profile_img($row['mb_id']);
     } else {
       $data['name'] = $is_admin ? $row['lo_ip'] : preg_replace("/([0-9]+).([0-9]+).([0-9]+).([0-9]+)/", G5_IP_DISPLAY, $row['lo_ip']);
     }
-    $data['num'] = sprintf('%03d', $i+1);
+    $url = get_text($row['lo_url']);
+    $data['loc'] = ($url && $is_admin == 'super') ? "<a href=\"{$url}\">{$row['lo_location']}</a>" : $row['lo_location'];
     $list[] = $data;
     $i++;
   }
 
-  $cnt = count($list);
-  if ( $cnt || ($lastCnt && !$cnt) ) {
-    $json = json_encode($list, JSON_UNESCAPED_UNICODE);
-    echo 'data: '.$json."\n\n";
-    ob_end_flush();
-    flush();
-  }
-  $lastCnt = $cnt;
+  $json = json_encode($list, JSON_UNESCAPED_UNICODE);
+  echo 'data: '.$json."\n\n";
+  ob_end_flush();
+  flush();
 
   if ( connection_aborted() ) exit;
 
